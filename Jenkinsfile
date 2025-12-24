@@ -45,16 +45,22 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-      steps {
-        container('kaniko') {
-          sh '''
-            /kaniko/executor \
-              -f `pwd`/Dockerfile \
-              -c `pwd` \
-              --destination=docker.io/ernest633/dso-demo:v1 \
-              --cache=true
-          '''
+      // Run this stage on the Kaniko pod instead of default Maven container
+      agent {
+        kubernetes {
+          label 'kaniko'           // Must match the Pod Template label in Jenkins
+          defaultContainer 'kaniko' // The container in that pod template
         }
+      }
+      steps {
+        sh '''
+          /kaniko/executor \
+            -f `pwd`/Dockerfile \
+            -c `pwd` \
+            --destination=docker.io/ernest633/dso-demo:v1 \
+            --cache=true \
+            --skip-tls-verify
+        '''
       }
     }
 
