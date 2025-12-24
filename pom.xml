@@ -46,7 +46,12 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>12.1.9</version>
+				<version>6.1.1</version>
+				<!-- Add configuration block here -->
+				<configuration>
+					<!-- Use environment variable for NVD API Key -->
+					<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>

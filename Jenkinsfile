@@ -1,5 +1,8 @@
 pipeline {
   agent {
+  environment {
+    NVD_API_KEY = credentials('nvd-api-key') // if stored in Jenkins credentials
+  }
     kubernetes {
       yamlFile 'build-agent.yaml'
       defaultContainer 'maven'
