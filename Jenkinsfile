@@ -6,6 +6,7 @@ pipeline {
       idleMinutes 1
     }
   }
+
   stages {
     stage('Build') {
       parallel {
@@ -18,6 +19,7 @@ pipeline {
         }
       }
     }
+
     stage('Test') {
       parallel {
         stage('Unit Tests') {
@@ -29,6 +31,7 @@ pipeline {
         }
       }
     }
+
     stage('Package') {
       parallel {
         stage('Create Jarfile') {
@@ -41,11 +44,25 @@ pipeline {
       }
     }
 
+    stage('Build Docker Image') {
+      steps {
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              -f `pwd`/Dockerfile \
+              -c `pwd` \
+              --destination=docker.io/ernest633/dso-demo:v1 \
+              --cache=true
+          '''
+        }
+      }
+    }
+
     stage('Deploy to Dev') {
       steps {
-        // TODO
         sh "echo done"
       }
     }
   }
 }
+
