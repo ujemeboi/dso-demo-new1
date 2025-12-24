@@ -45,22 +45,19 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-      // Run this stage on the Kaniko pod instead of default Maven container
-      agent {
-        kubernetes {
-          label 'kaniko'           // Must match the Pod Template label in Jenkins
-          defaultContainer 'kaniko' // The container in that pod template
-        }
-      }
+      // Use the Kaniko pod template configured in Jenkins UI
+      agent { label 'kaniko' } // must match pod template label
       steps {
-        sh '''
-          /kaniko/executor \
-            -f `pwd`/Dockerfile \
-            -c `pwd` \
-            --destination=docker.io/ernest633/dso-demo:v1 \
-            --cache=true \
-            --skip-tls-verify
-        '''
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              -f `pwd`/Dockerfile \
+              -c `pwd` \
+              --destination=docker.io/ernest633/dso-demo:v1 \
+              --cache=true \
+              --skip-tls-verify
+          '''
+        }
       }
     }
 
