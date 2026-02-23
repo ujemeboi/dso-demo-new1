@@ -6,25 +6,25 @@ metadata:
 spec:
   containers:
     - name: maven
-      [cite_start]image: maven:3.9-eclipse-temurin-17 # Supported on ARM/AMD64 [cite: 1]
+      [cite_start]image: maven:3.9-eclipse-temurin-17
       command: ["cat"]
       tty: true
       volumeMounts:
         - name: m2
           mountPath: /root/.m2/
     - name: docker-tools
-      [cite_start]image: docker:dind # Fixes "exec format error" 
+      [cite_start]image: docker:dind
       command: ["cat"]
       tty: true
       volumeMounts:
         - mountPath: /var/run
           name: docker-sock
     - name: trufflehog
-      [cite_start]image: trufflesecurity/trufflehog:latest # Official multi-arch image 
+      [cite_start]image: trufflesecurity/trufflehog:latest
       command: ["cat"]
       tty: true
     - name: licensefinder
-      image: licensefinder/license_finder:latest # Fixes "ErrImagePull"
+      image: licensefinder/license_finder:latest
       command: ["cat"]
       tty: true
   volumes:
