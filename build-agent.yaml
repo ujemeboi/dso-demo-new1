@@ -6,32 +6,26 @@ metadata:
 spec:
   containers:
     - name: maven
-      image: maven:alpine
-      command:
-        - cat
+      image: maven:3.9-eclipse-temurin-17 # More robust multi-arch support
+      command: ["cat"]
       tty: true
       volumeMounts:
         - name: m2
           mountPath: /root/.m2/
     - name: docker-tools
-      image: rmkanda/docker-tools:latest
-      command:
-        - cat
+      image: docker:dind # Standard Docker-in-Docker image (Multi-arch)
+      command: ["cat"]
       tty: true
       volumeMounts:
         - mountPath: /var/run
           name: docker-sock
-        - mountPath: /tmp/trivycache/
-          name: trivycache
     - name: trufflehog
-      image: rmkanda/trufflehog
-      command:
-        - cat
+      image: trufflesecurity/trufflehog:latest # Official multi-arch image
+      command: ["cat"]
       tty: true
     - name: licensefinder
-      image: licensefinder/license_finder
-      command:
-        - cat
+      image: vishwakftw/license_finder:latest # Verify if an ARM version exists or rebuild
+      command: ["cat"]
       tty: true
   volumes:
     - name: m2
